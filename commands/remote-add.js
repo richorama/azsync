@@ -1,6 +1,7 @@
 const commandLineArgs = require('command-line-args')
 const storage = require('../lib/storage')
 const REMOTES = 'REMOTES'
+const validate = require('../lib/validate')
 
 const definitions = [
   { name: 'name', defaultOption: true },
@@ -13,7 +14,12 @@ module.exports = argv => {
     stopAtFirstUnknown: true
   })
 
-  let [name, connection] = options._unknown
+  const name = options.name
+  const [connection] = options._unknown || []
+
+  if (!validate(name)) return console.log('please supply a name for the remote')
+  if (!validate(connection))
+    return console.log('please supply a connection string for the remote')
 
   addRemote(name, connection)
     .then(() => console.log('Remote added'))
