@@ -1,6 +1,5 @@
 const commandLineArgs = require('command-line-args')
-const storage = require('../lib/storage')
-const REMOTES = 'REMOTES'
+const remotes = require('../lib/remotes')
 const validate = require('../lib/validate')
 
 const definitions = [
@@ -27,9 +26,5 @@ module.exports = argv => {
 }
 
 async function addRemote(name, connection) {
-  const remotes = (await storage.get(REMOTES)) || {}
-  remotes[name] = {
-    connection
-  }
-  await storage.put(REMOTES, remotes)
+  await remotes.put(name, { connection })
 }
