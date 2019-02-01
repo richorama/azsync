@@ -17,6 +17,7 @@
     "command-line-args": "^5.0.2",
     "cookie": "^0.3.1",
     "ignore": "^5.0.5",
-    "node-persist": "^3.0.3"
+    "node-persist": "^3.0.3",
+    "progress": "^2.0.3"
   }
 }

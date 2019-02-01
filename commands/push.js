@@ -4,6 +4,7 @@ const validate = require('../lib/validate')
 const discoverLocalFiles = require('../lib/discoverLocalFiles')
 const Azure = require('../lib/azure')
 const sorter = require('../lib/sorter')
+const ProgressBar = require('progress')
 
 const definitions = [
   { name: 'remote', defaultOption: true },
@@ -39,10 +40,20 @@ async function push(local, remoteName, container) {
 
   sortResult = sorter(localFiles, remoteFiles)
 
+  var bar = new ProgressBar('[:bar] :etas :filename', {
+    total: sortResult.toUpload.length,
+    complete: '#',
+    incomplete: '_',
+    width:20,
+  })
 
+  console.log(`Uploading ${sortResult.toUpload.length} files`)
   for (var i = 0; i < sortResult.toUpload.length; i++) {
     var file = sortResult.toUpload[i]
-    console.log('Uploading ', file.path)
+    //console.log('Uploading ', file.path)
     await azure.uploadFile(container, file)
+    bar.tick({
+      filename: file.path
+    })
   }
 }

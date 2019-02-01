@@ -44,6 +44,7 @@ function plural(arr) {
   return 's'
 }
 
+// colours: https://stackoverflow.com/questions/9781218/how-to-change-node-jss-console-font-color
 function printFileList(list, colour) {
   if (list.length === 0) return
   console.log()
