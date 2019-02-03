@@ -1,10 +1,8 @@
 const commandLineArgs = require('command-line-args')
-const remotes = require('../lib/remotes')
 const validate = require('../lib/validate')
-const discoverLocalFiles = require('../lib/discoverLocalFiles')
-const Azure = require('../lib/azure')
-const sorter = require('../lib/sorter')
 const ProgressBar = require('progress')
+const getStatus = require('../lib/getStatus')
+const colour = require('../lib/colour')
 
 const definitions = [
   { name: 'remote', defaultOption: true },
@@ -29,31 +27,38 @@ module.exports = argv => {
 }
 
 async function push(local, remoteName, container) {
-  const remote = await remotes.get(remoteName)
-  if (!remote) throw new Error(`remote ${remoteName} not found`)
+  const sortResult = await getStatus(local, remoteName, container)
 
-  const localFiles = discoverLocalFiles(local)
-
-  const azure = Azure(remote)
-  await azure.createContainer(container)
-  const remoteFiles = await azure.discoverFiles(container)
-
-  sortResult = sorter(localFiles, remoteFiles)
+  const totalBytes = sortResult.toUpload.reduce((total, value) => total + value.size, 0)
+  console.log(`Uploading ${sortResult.toUpload.length} files (${totalBytes} bytes)`)
 
   var bar = new ProgressBar('[:bar] :etas :filename', {
     total: sortResult.toUpload.length,
-    complete: '#',
-    incomplete: '_',
-    width:20,
+    complete: colour('=', colour.green),
+    incomplete: '.',
+    width: 20
   })
 
-  console.log(`Uploading ${sortResult.toUpload.length} files`)
-  for (var i = 0; i < sortResult.toUpload.length; i++) {
-    var file = sortResult.toUpload[i]
-    //console.log('Uploading ', file.path)
-    await azure.uploadFile(container, file)
-    bar.tick({
-      filename: file.path
-    })
+  function upload() {
+    const file = sortResult.toUpload.pop()
+    if (!file) return
+    sortResult.azure
+      .uploadFile(container, file)
+      .then(() => {
+        bar.tick({
+          filename: file.path
+        })
+        setImmediate(upload)
+      })
+      .catch(err => {
+        console.log(`ERROR: ${file.path} - ${err}`)
+        bar.tick({
+          filename: file.path
+        })
+        setImmediate(upload)
+      })
   }
+
+  // use a parallelism of 4
+  for (var i = 0; i < 4; i++) upload()
 }

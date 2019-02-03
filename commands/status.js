@@ -1,9 +1,7 @@
 const commandLineArgs = require('command-line-args')
-const remotes = require('../lib/remotes')
 const validate = require('../lib/validate')
-const discoverLocalFiles = require('../lib/discoverLocalFiles')
-const Azure = require('../lib/azure')
-const sorter = require('../lib/sorter')
+const getStatus = require('../lib/getStatus')
+const colour = require('../lib/colour')
 
 const definitions = [
   { name: 'remote', defaultOption: true },
@@ -28,13 +26,7 @@ module.exports = argv => {
 }
 
 async function status(local, remoteName, container) {
-  const remote = await remotes.get(remoteName)
-  if (!remote) throw new Error(`remote ${remoteName} not found`)
-  const localFiles = discoverLocalFiles(local)
-  const azure = Azure(remote)
-  const remoteFiles = await azure.discoverFiles(container)
-
-  const sortResult = sorter(localFiles, remoteFiles)
+  const sortResult = await getStatus(local, remoteName, container)
 
   printSortResult(sortResult)
 }
@@ -45,10 +37,10 @@ function plural(arr) {
 }
 
 // colours: https://stackoverflow.com/questions/9781218/how-to-change-node-jss-console-font-color
-function printFileList(list, colour) {
+function printFileList(list, c) {
   if (list.length === 0) return
   console.log()
-  list.forEach(file => console.log(`    \x1b[${colour}m${file.path}\x1b[0m`))
+  list.forEach(file => console.log(`    ${colour(file.path, c)}`))
   console.log()
 }
 
@@ -67,14 +59,14 @@ function printSortResult(sortResult) {
         sortResult.modified
       )}`
     )
-    printFileList(sortResult.modified, 33)
+    printFileList(sortResult.modified, colour.yellow)
   }
 
   if (sortResult.localOnly.length) {
     console.log(
       `${sortResult.localOnly.length} local file${plural(sortResult.localOnly)}`
     )
-    printFileList(sortResult.localOnly, 32)
+    printFileList(sortResult.localOnly, colour.green)
   }
 
   if (sortResult.remoteOnly.length) {
@@ -84,5 +76,5 @@ function printSortResult(sortResult) {
       )}`
     )
   }
-  printFileList(sortResult.remoteOnly, 31)
+  printFileList(sortResult.remoteOnly, colour.red)
 }
