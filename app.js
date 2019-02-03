@@ -9,7 +9,8 @@ const argv = mainCommand._unknown || []
 const commands = {
   remote: require('./commands/remote'),
   status: require('./commands/status'),
-  push: require('./commands/push')
+  push: require('./commands/push'),
+  pull: require('./commands/pull')
 }
 
 if (commands[mainCommand.name]) {
