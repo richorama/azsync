@@ -2,7 +2,7 @@
 
 A command line tool to efficiently synchronize files between a local directory and azure storage containers, by only uploading/downloading the files that have changed.
 
-# Installation
+## Installation
 
 ```
 > npm install azsync -g
@@ -51,3 +51,23 @@ To pull remote files down to the local folder:
 ```
 
 Note that in all cases where the `REMOTE_NAME` argument is used, the storage connection string can be used instead.
+
+
+## TODO
+
+* Plural on upload status
+* Prune remote/local files
+* Wipe a remote
+* Support snapshotting
+* Warn on remote files with no MD5
+* Pretty print total file upload size
+* List remote containers
+* Set a default remote/container
+* read local & remote files at the same time
+* Improve help system
+* publish on npm
+* allow remote details to be stored in a .azsync file
+
+## License
+
+MIT
