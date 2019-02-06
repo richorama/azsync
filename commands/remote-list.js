@@ -17,6 +17,6 @@ module.exports = argv => {
 async function listRemotes(verbose) {
   const list = await remotes.all()
   for (remote in list) {
-    console.log(`${remote} ${verbose ? remotes[remote].connection : ''}`)
+    console.log(`${remote} ${verbose ? list[remote].connection : ''}`)
   }
 }
