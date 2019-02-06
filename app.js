@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 const commandLineArgs = require('command-line-args')
 const mainDefinitions = [{ name: 'name', defaultOption: true }]
 const mainCommand = commandLineArgs(mainDefinitions, {
