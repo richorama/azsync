@@ -3,6 +3,7 @@ const validate = require('../lib/validate')
 const ProgressBar = require('progress')
 const getStatus = require('../lib/getStatus')
 const colour = require('../lib/colour')
+const plural = require('../lib/plural')
 
 const definitions = [
   { name: 'remote', defaultOption: true },

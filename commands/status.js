@@ -2,6 +2,7 @@ const commandLineArgs = require('command-line-args')
 const validate = require('../lib/validate')
 const getStatus = require('../lib/getStatus')
 const colour = require('../lib/colour')
+const plural = require('../lib/plural')
 
 const definitions = [
   { name: 'remote', defaultOption: true },
@@ -29,11 +30,6 @@ async function status(local, remoteName, container) {
   const sortResult = await getStatus(local, remoteName, container)
 
   printSortResult(sortResult)
-}
-
-function plural(arr) {
-  if (arr.length === 1) return ''
-  return 's'
 }
 
 // colours: https://stackoverflow.com/questions/9781218/how-to-change-node-jss-console-font-color

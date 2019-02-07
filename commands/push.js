@@ -3,6 +3,7 @@ const validate = require('../lib/validate')
 const ProgressBar = require('progress')
 const getStatus = require('../lib/getStatus')
 const colour = require('../lib/colour')
+const plural = require('../lib/plural')
 
 const definitions = [
   { name: 'remote', defaultOption: true },
@@ -30,7 +31,7 @@ async function push(local, remoteName, container) {
   const sortResult = await getStatus(local, remoteName, container)
 
   const totalBytes = sortResult.toUpload.reduce((total, value) => total + value.size, 0)
-  console.log(`Uploading ${sortResult.toUpload.length} files (${totalBytes} bytes)`)
+  console.log(`Uploading ${sortResult.toUpload.length} file${plural(sortResult.toUpload)} (${totalBytes} bytes)`)
 
   var bar = new ProgressBar('[:bar] :etas :filename', {
     total: sortResult.toUpload.length,

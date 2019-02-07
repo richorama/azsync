@@ -55,7 +55,6 @@ Note that in all cases where the `REMOTE_NAME` argument is used, the storage con
 
 ## TODO
 
-* Plural on upload status
 * Prune remote/local files
 * Wipe a remote
 * Support snapshotting
@@ -67,6 +66,7 @@ Note that in all cases where the `REMOTE_NAME` argument is used, the storage con
 * Improve help system
 * publish on npm
 * allow remote details to be stored in a .azsync file
+* paging of container results
 
 ## License
 
