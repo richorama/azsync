@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+const colour = require('./lib/colour')
 const commandLineArgs = require('command-line-args')
 const mainDefinitions = [{ name: 'name', defaultOption: true }]
 const mainCommand = commandLineArgs(mainDefinitions, {
@@ -15,5 +16,18 @@ const commands = {
 }
 
 if (commands[mainCommand.name]) {
-  commands[mainCommand.name](argv)
+  return commands[mainCommand.name](argv)
 }
+
+console.log(
+  colour(
+    `
+  __   ____  ____  _  _  __ _   ___ 
+ / _\\ (__  )/ ___)( \\/ )(  ( \\ / __)
+/    \\ / _/ \\___ \\ )  / /    /( (__ 
+\\_/\\_/(____)(____/(__/  \\_)__) \\___)
+
+`,
+    colour.blue
+  )
+)
