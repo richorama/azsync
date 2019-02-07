@@ -59,7 +59,6 @@ Note that in all cases where the `REMOTE_NAME` argument is used, the storage con
 * Wipe a remote
 * Support snapshotting
 * Warn on remote files with no MD5
-* Pretty print total file upload size
 * List remote containers
 * Set a default remote/container
 * read local & remote files at the same time

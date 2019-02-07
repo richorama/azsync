@@ -31,7 +31,7 @@ async function pull(local, remoteName, container) {
   const sortResult = await getStatus(local, remoteName, container)
 
   const totalBytes = sortResult.toDownload.reduce((total, value) => total + value.size, 0)
-  console.log(`Downloading ${sortResult.toDownload.length} files (${totalBytes} bytes)`)
+  console.log(`Downloading ${sortResult.toDownload.length} files (${prettyBytes(totalBytes)})`)
 
   var bar = new ProgressBar('[:bar] :etas :filename', {
     total: sortResult.toDownload.length,
