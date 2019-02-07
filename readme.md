@@ -66,7 +66,6 @@ Note that in all cases where the `REMOTE_NAME` argument is used, the storage con
 * Improve help system
 * publish on npm
 * allow remote details to be stored in a .azsync file
-* paging of container results
 
 ## License
 
