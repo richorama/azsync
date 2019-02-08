@@ -4,9 +4,10 @@ const ProgressBar = require('progress')
 const getStatus = require('../lib/getStatus')
 const colour = require('../lib/colour')
 const plural = require('../lib/plural')
-const prettyBytes = require('pretty-bytes');
+const prettyBytes = require('pretty-bytes')
 
 const definitions = [
+  { name: 'prune', alias: 'p', type: Boolean },
   { name: 'remote', defaultOption: true },
   { name: 'container' }
 ]
@@ -23,16 +24,34 @@ module.exports = argv => {
   if (!validate(remote)) return console.log('please supply a remote')
   if (!validate(container)) return console.log('please supply a container name')
 
-  push('.', remote, container)
+
+
+  go('.', remote, container, options.prune)
     .then(() => {})
     .catch(err => console.log('error', err))
 }
 
-async function push(local, remoteName, container) {
+async function go(local, remoteName, container, prune){
   const sortResult = await getStatus(local, remoteName, container)
+  if (sortResult.toUpload.length){
+    await pushFiles(container, sortResult)
+  }
+  if (prune && sortResult.remoteOnly.length){
+    await deleteFiles(container, sortResult)
+  }
+}
 
-  const totalBytes = sortResult.toUpload.reduce((total, value) => total + value.size, 0)
-  console.log(`Uploading ${sortResult.toUpload.length} file${plural(sortResult.toUpload)} (${prettyBytes(totalBytes)})`)
+async function pushFiles(container, sortResult) {
+
+  const totalBytes = sortResult.toUpload.reduce(
+    (total, value) => total + value.size,
+    0
+  )
+  console.log(
+    `Uploading ${sortResult.toUpload.length} file${plural(
+      sortResult.toUpload
+    )} (${prettyBytes(totalBytes)})`
+  )
 
   var bar = new ProgressBar('[:bar] :etas :filename', {
     total: sortResult.toUpload.length,
@@ -63,4 +82,41 @@ async function push(local, remoteName, container) {
 
   // use a parallelism of 4
   for (var i = 0; i < 4; i++) upload()
+}
+
+async function deleteFiles(container, sortResult) {
+
+  console.log(
+    `Deleting ${sortResult.remoteOnly.length} remote file${plural(
+      sortResult.remoteOnly
+    )}`
+  )
+
+  var bar = new ProgressBar('[:bar] :etas :filename', {
+    total: sortResult.remoteOnly.length,
+    complete: colour('=', colour.green),
+    incomplete: '.',
+    width: 20
+  })
+
+  function deleteFile() {
+    const file = sortResult.remoteOnly.pop()
+    if (!file) return
+    sortResult.azure.deleteFile(container, file).then(() => {
+      bar.tick({
+        filename: file.path
+      })
+      setImmediate(deleteFile)
+    })
+    .catch(err => {
+      console.log(`ERROR: ${file.path} - ${err}`)
+      bar.tick({
+        filename: file.path
+      })
+      setImmediate(deleteFile)
+    })
+  }
+
+  // use a parallelism of 4
+  for (var i = 0; i < 4; i++) deleteFile()
 }
