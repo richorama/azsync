@@ -4,8 +4,10 @@ const ProgressBar = require('progress')
 const getStatus = require('../lib/getStatus')
 const colour = require('../lib/colour')
 const plural = require('../lib/plural')
+const fs = require('fs')
 
 const definitions = [
+  { name: 'prune', alias: 'p', type: Boolean },
   { name: 'remote', defaultOption: true },
   { name: 'container' }
 ]
@@ -22,16 +24,31 @@ module.exports = argv => {
   if (!validate(remote)) return console.log('please supply a remote')
   if (!validate(container)) return console.log('please supply a container name')
 
-  pull('.', remote, container)
+  go('.', remote, container, options.prune)
     .then(() => {})
     .catch(err => console.log('error', err))
 }
 
-async function pull(local, remoteName, container) {
+async function go(local, remoteName, container, prune) {
   const sortResult = await getStatus(local, remoteName, container)
+  if (sortResult.toDownload.length) {
+    await pullFiles(container, sortResult)
+  }
+  if (prune && sortResult.remoteOnly.length) {
+    await deleteFiles(sortResult)
+  }
+}
 
-  const totalBytes = sortResult.toDownload.reduce((total, value) => total + value.size, 0)
-  console.log(`Downloading ${sortResult.toDownload.length} files (${prettyBytes(totalBytes)})`)
+async function pullFiles(container, sortResult) {
+  const totalBytes = sortResult.toDownload.reduce(
+    (total, value) => total + value.size,
+    0
+  )
+  console.log(
+    `Downloading ${sortResult.toDownload.length} files (${prettyBytes(
+      totalBytes
+    )})`
+  )
 
   var bar = new ProgressBar('[:bar] :etas :filename', {
     total: sortResult.toDownload.length,
@@ -62,4 +79,24 @@ async function pull(local, remoteName, container) {
 
   // use a parallelism of 4
   for (var i = 0; i < 4; i++) download()
+}
+
+function deleteFiles(sortResult) {
+  console.log(
+    `Deleting ${sortResult.localOnly.length} local file${plural(
+      sortResult.localOnly
+    )}`
+  )
+
+  const bar = new ProgressBar('[:bar] :etas :filename', {
+    total: sortResult.localOnly.length,
+    complete: colour('=', colour.green),
+    incomplete: '.',
+    width: 20
+  })
+
+  for (const file in sortResult.localOnly) {
+    fs.unlinkSync(file.path)
+    bar.tick({ filename: file.path })
+  }
 }

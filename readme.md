@@ -55,7 +55,6 @@ Note that in all cases where the `REMOTE_NAME` argument is used, the storage con
 
 ## TODO
 
-* Prune remote/local files
 * Wipe a remote
 * Support snapshotting
 * Warn on remote files with no MD5

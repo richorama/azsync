@@ -92,7 +92,7 @@ async function deleteFiles(container, sortResult) {
     )}`
   )
 
-  var bar = new ProgressBar('[:bar] :etas :filename', {
+  const bar = new ProgressBar('[:bar] :etas :filename', {
     total: sortResult.remoteOnly.length,
     complete: colour('=', colour.green),
     incomplete: '.',
