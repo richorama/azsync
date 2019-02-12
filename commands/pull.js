@@ -5,6 +5,7 @@ const getStatus = require('../lib/getStatus')
 const colour = require('../lib/colour')
 const plural = require('../lib/plural')
 const fs = require('fs')
+const prettyBytes = require('pretty-bytes')
 
 const definitions = [
   { name: 'prune', alias: 'p', type: Boolean },
