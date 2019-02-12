@@ -5,7 +5,6 @@ const getStatus = require('../lib/getStatus')
 const colour = require('../lib/colour')
 const plural = require('../lib/plural')
 const fs = require('fs')
-const prettyBytes = require('pretty-bytes')
 
 const definitions = [
   { name: 'prune', alias: 'p', type: Boolean },
@@ -35,7 +34,7 @@ async function go(local, remoteName, container, prune) {
   if (sortResult.toDownload.length) {
     await pullFiles(container, sortResult)
   }
-  if (prune && sortResult.remoteOnly.length) {
+  if (prune && sortResult.localOnly.length) {
     await deleteFiles(sortResult)
   }
 }
