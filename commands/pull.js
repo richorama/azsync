@@ -4,7 +4,7 @@ const ProgressBar = require('progress')
 const getStatus = require('../lib/getStatus')
 const colour = require('../lib/colour')
 const plural = require('../lib/plural')
-const prettyBytes = require('prettyBytes')
+const prettyBytes = require('pretty-bytes')
 const fs = require('fs')
 
 const definitions = [
@@ -96,9 +96,8 @@ function deleteFiles(sortResult) {
     width: 20
   })
 
-  for (const file in sortResult.localOnly) {
-    console.log("file.path " + file.path)
+  sortResult.localOnly.forEach(file => {
     fs.unlinkSync(file.path)
     bar.tick({ filename: file.path })
-  }
+  })
 }
