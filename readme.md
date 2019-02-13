@@ -50,6 +50,12 @@ To pull remote files down to the local folder:
 > azsync pull REMOTE_NAME CONTAINER_NAME
 ```
 
+To list the containers for a remote:
+
+```
+> azsync container list REMOTE_NAME
+```
+
 Note that in all cases where the `REMOTE_NAME` argument is used, the storage connection string can be used instead.
 
 
@@ -58,7 +64,6 @@ Note that in all cases where the `REMOTE_NAME` argument is used, the storage con
 * Wipe a remote
 * Support snapshotting
 * Warn on remote files with no MD5
-* List remote containers
 * Set a default remote/container
 * read local & remote files at the same time
 * Improve help system

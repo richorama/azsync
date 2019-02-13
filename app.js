@@ -12,7 +12,8 @@ const commands = {
   remote: require('./commands/remote'),
   status: require('./commands/status'),
   push: require('./commands/push'),
-  pull: require('./commands/pull')
+  pull: require('./commands/pull'),
+  container: require('./commands/container')
 }
 
 if (commands[mainCommand.name]) {
