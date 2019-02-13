@@ -5,6 +5,7 @@ const mainDefinitions = [{ name: 'name', defaultOption: true }]
 const mainCommand = commandLineArgs(mainDefinitions, {
   stopAtFirstUnknown: true
 })
+const packageJson = require('./package.json')
 
 const argv = mainCommand._unknown || []
 
@@ -27,6 +28,8 @@ console.log(
  / _\\ (__  )/ ___)( \\/ )(  ( \\ / __)
 /    \\ / _/ \\___ \\ )  / /    /( (__
 \\_/\\_/(____)(____/(__/  \\_)__) \\___)
+
+version ${packageJson.version}
 `,
     colour.blue
   )
