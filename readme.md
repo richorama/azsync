@@ -56,12 +56,17 @@ To list the containers for a remote:
 > azsync container list REMOTE_NAME
 ```
 
+To delete a container on a remote:
+
+```
+> azsync container delete REMOTE_NAME CONTAINER_NAME
+```
+
 Note that in all cases where the `REMOTE_NAME` argument is used, the storage connection string can be used instead.
 
 
 ## TODO
 
-* Wipe a remote
 * Support snapshotting
 * Warn on remote files with no MD5
 * Set a default remote/container
