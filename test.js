@@ -19,7 +19,7 @@ describe('lib/md5', () => {
     const hash = md5('./lib/md5.js')
 
     if (
-      hash.toLowerCase() !== '96C0D686B60669D9EB74FD9C68123E02'.toLowerCase()
+      hash.md5.toLowerCase() !== 'gnE0rvCTX71Nw5vR5LFW9w=='.toLowerCase()
     ) {
       return done(`unexpected hash value (${hash})`)
     }
