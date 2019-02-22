@@ -1,3 +1,5 @@
+![](https://travis-ci.org/richorama/azsync.svg?branch=master)
+
 # azsync
 
 A command line tool to efficiently synchronize files between a local directory and azure storage containers, by only uploading/downloading the files that have changed.
