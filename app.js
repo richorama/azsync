@@ -30,6 +30,19 @@ console.log(
 \\_/\\_/(____)(____/(__/  \\_)__) \\___)
 
 version ${packageJson.version}
+https://github.com/richorama/azsync
+
+Add a storage account:
+> azsync remote add REMOTE_NAME STORAGE_CONNECTION_STRING
+
+To see if local files are in sync with a container:
+> azsync status REMOTE_NAME CONTAINER_NAME
+
+To push local files to a container:
+> azsync push REMOTE_NAME CONTAINER_NAME
+
+To pull remote files down to the local folder:
+> azsync pull REMOTE_NAME CONTAINER_NAME
 `,
     colour.blue
   )

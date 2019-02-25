@@ -66,6 +66,14 @@ To delete a container on a remote:
 
 Note that in all cases where the `REMOTE_NAME` argument is used, the storage connection string can be used instead.
 
+## How it Works
+
+Azsync calculates the MD5 hash for each file it finds in the current working directory,
+working recursively through all folders. It then queries the given Azure Blob Storage Container
+to retrieve the names of all blobs, and their MD5 hashes.
+
+It then compares hashes, to determine which files have changed, so it can upload/download only 
+the difference.
 
 ## TODO
 
