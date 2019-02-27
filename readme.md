@@ -79,6 +79,8 @@ the difference.
 
 ## TODO
 
+* Add flag to make a container public/private
+* Add a command to get the url for a container
 * Support snapshotting
 * Warn on remote files with no MD5
 * Set a default remote/container
