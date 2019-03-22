@@ -56,7 +56,7 @@ async function pushFiles(container, sortResult) {
   var bar = new ProgressBar('[:bar] :etas :filename', {
     total: sortResult.toUpload.length,
     complete: colour('=', colour.green),
-    incomplete: '.',
+    incomplete: ' ',
     width: 20
   })
 

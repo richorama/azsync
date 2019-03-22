@@ -54,7 +54,7 @@ async function pullFiles(container, sortResult) {
   var bar = new ProgressBar('[:bar] :etas :filename', {
     total: sortResult.toDownload.length,
     complete: colour('=', colour.green),
-    incomplete: '.',
+    incomplete: ' ',
     width: 20
   })
 
