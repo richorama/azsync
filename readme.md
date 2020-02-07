@@ -86,7 +86,6 @@ the difference.
 * Set a default remote/container
 * read local & remote files at the same time
 * Improve help system
-* publish on npm
 * allow remote details to be stored in a .azsync file
 
 ## License
